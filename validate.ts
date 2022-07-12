@@ -1,4 +1,4 @@
-import type {  Rule, ValidatorObj } from "./types.ts";
+import type {  Rule, ValidatorObj, ValidationResult } from "./types.ts";
 import type {
   ValidationOptions,
   RawValidationResult,
@@ -31,11 +31,10 @@ export const checkRules = async (
       res = await res;
 
     }
-
-    if (res !== undefined) {
-      results.push(res);
-      if (res.implicit === true) {
-        break;
+    
+    if (res !== undefined) {      
+      if (Object.keys(res).length>0) {
+        results.push(res);
       }
     }
   }
@@ -50,7 +49,7 @@ export const validate =  async <T extends Record<string, unknown>>(
   options: ValidationOptions = {
     messages: defaultMessages,
   },
-): Promise<any> => {
+): Promise<ValidationResult> => {
   
  
   const rawErrors: RawValidationResult = {};  
@@ -68,8 +67,6 @@ export const validate =  async <T extends Record<string, unknown>>(
   }
 
   const passes = Object.keys(rawErrors).length === 0;  
-  
   const errors = passes ? {} : rawErrors;
-  
-  return  errors;
+  return [passes, errors];
 };

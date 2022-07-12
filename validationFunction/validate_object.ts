@@ -34,10 +34,10 @@ export function validateObject(
 
         for (let key in rules) {
 
-          const value1: InputData = getValue(value, key);
+          const keyValue: InputData = getValue(value, key);
 
           const errors: InvalidPayload[] = await checkRules(
-            value1,
+            keyValue,
             rules[key]
           );          
           if (errors.length) {
